@@ -7,6 +7,9 @@ ln -sf /home/box/web/etc/hello.py /etc/gunicorn.d/hello.py
 
 sudo /etc/init.d/nginx restart
 
-cd /home/box/web
-sudo gunicorn -c etc/hello.py hello:app
+
+ln -sf /home/box/web/etc/hello.py /etc/gunicorn.d/hello.py
+
+sudo /etc/init.d/gunicorn reload
+sudo /etc/init.d/gunicorn restart
 
