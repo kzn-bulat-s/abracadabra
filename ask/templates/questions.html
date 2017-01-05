@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <ul>
+            {% for question in questions %}
+            <li>
+                <a href="{{ question.url }}">
+                    {{ question.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

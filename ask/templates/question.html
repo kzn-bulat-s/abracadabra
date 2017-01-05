@@ -1,0 +1,15 @@
+<html>
+    <body>
+        <h1>{{ question.title }}</h1>
+        <p>{{ question.text }}</p>
+        <p>Posted at {{ question.added_at }} by {{ question.author.username }}</p>
+        <ul>
+            {% for answer in question.answer_set.all %}
+            <li>
+                <p>{{ answer.text }}</p>
+                <p>Posted at {{ answer.added_at }} by {{ answer.author.username }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
