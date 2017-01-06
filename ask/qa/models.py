@@ -4,7 +4,7 @@ from django.contrib.auth import models as auth_models
 
 class QuestionManager(models.Manager):
     def new(self):
-        return self.all().order_by('-added_at')
+        return self.all().order_by('-pk')
 
     def popular(self):
         return self.all().order_by('-rating')

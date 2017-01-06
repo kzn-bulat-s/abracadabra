@@ -34,9 +34,9 @@ def _render_questions(request, queryset, page_no, limit=10):
 
 def list_questions(request):
     page_no = _get_page_no(request)
-    return _render_questions(request, Question.objects.all(), page_no)
+    return _render_questions(request, Question.objects.new(), page_no)
 
-def list_popular_questions(request, page):
+def list_popular_questions(request):
     page_no = _get_page_no(request)
     return _render_questions(request, Question.objects.popular(), page_no)
 
