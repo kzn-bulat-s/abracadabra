@@ -68,6 +68,9 @@ DATABASES = {
     }
 }
 
+SESSION_KEY = 'sessionid'
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )

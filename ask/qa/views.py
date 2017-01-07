@@ -4,6 +4,10 @@ from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseNotAllowed, HttpResponseRedirect)
 from django.shortcuts import render
 
+from django.contrib.auth import authenticate, login as login_user
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
+
 from models import Question, Answer
 from forms import AskForm, AnswerForm
 
@@ -82,3 +86,50 @@ def ask_question(request):
     return render(request, 'ask.html', {
                 'ask_form': ask_form,
                 'ask_url': reverse('ask') }) 
+
+def signup(request):
+    if request.method == 'POST':
+        signup_form = UserCreationForm(request.POST)
+        if signup_form.is_valid():
+            try:
+                user = signup_form.save()
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login_user(request, user)
+            except Exception as e:
+                print e
+            else:
+                return HttpResponseRedirect('/')
+
+    elif request.method == 'GET':
+        signup_form = UserCreationForm()
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    return render(request, 'signup.html', {
+            'signup_form': signup_form
+        })
+
+def login(request):
+    if request.method == 'POST':
+        login_form = AuthenticationForm(data=request.POST)
+        if login_form.is_valid():
+            try:
+                data = login_form.cleaned_data
+                user = authenticate(username=data['username'],
+                                    password=data['password'])
+                if user is not None and user.is_active:
+                    login_user(request, user)
+                    return HttpResponseRedirect('/')
+            except:
+                pass
+            else:
+                return HttpResponseRedirect('/')
+
+    elif request.method == 'GET':
+        login_form = AuthenticationForm()
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    return render(request, 'login.html', {
+            'login_form': login_form
+        })

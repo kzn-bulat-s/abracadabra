@@ -16,7 +16,7 @@ class AnswerForm(forms.Form):
         
         try:
             question = Question.objects.get(pk=data['question'])
-        except Question.DoesNotExist:
+        except (Question.DoesNotExist, KeyError):
             raise forms.ValidationError("Question doesn't exists.")
         else:
             data['question'] = question
