@@ -35,8 +35,10 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
 
+    'django_extensions',
     'qa',
 )
 
@@ -59,17 +61,12 @@ WSGI_APPLICATION = 'ask.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'ask_app',
-        'USER': 'ask_app',
-        'PASSWORD': 'pass123',
-        'HOST': 'localhost',
-        'PORT': '3306',
     }
 }
 
 SESSION_KEY = 'sessionid'
-SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),

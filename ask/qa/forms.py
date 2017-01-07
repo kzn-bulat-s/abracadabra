@@ -9,6 +9,13 @@ class AskForm(forms.ModelForm):
         model = Question
         fields = ['title', 'text']
 
+    def save(self, commit=True):
+        question = super(AskForm, self).save(commit=False)
+        question.author = self.user
+        if commit:
+            question.save()
+        return question
+
 class AnswerForm(forms.Form):
     text = forms.CharField()
     question = forms.IntegerField()
@@ -28,7 +35,8 @@ class AnswerForm(forms.Form):
     def save(self):
         data = self.cleaned_data
         answer = Answer.objects.create(text=data['text'],
-                              question=data['question'])
+                              question=data['question'],
+                              author=self.user)
         return answer
 
 class UserCreationFormWithEmail(forms.ModelForm):

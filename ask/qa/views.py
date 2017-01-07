@@ -56,6 +56,7 @@ def show_question(request, id):
         answer_form = AnswerForm(request.POST)
         
         if answer_form.is_valid():
+            answer_form.user = request.user
             answer_form.save()
         
             url = reverse('question', args=(id,))
@@ -73,6 +74,7 @@ def ask_question(request):
         ask_form = AskForm(request.POST)
 
         if ask_form.is_valid():
+            ask_form.user = request.user
             question = ask_form.save()
             url = reverse('question', args=(question.id,))
             return HttpResponseRedirect(url)
