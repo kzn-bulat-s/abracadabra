@@ -117,8 +117,10 @@ def login(request):
         if login_form.is_valid():
             try:
                 data = login_form.cleaned_data
+		print data
                 user = authenticate(username=data['username'],
                                     password=data['password'])
+		print user
                 if user is not None and user.is_active:
                     login_user(request, user)
                     return HttpResponseRedirect('/')
@@ -126,6 +128,8 @@ def login(request):
                 pass
             else:
                 return HttpResponseRedirect('/')
+	print login_form.cleaned_data
+	print login_form.errors
 
     elif request.method == 'GET':
         login_form = AuthenticationForm()
