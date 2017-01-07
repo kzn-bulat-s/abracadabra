@@ -44,10 +44,10 @@ class UserCreationFormWithEmail(forms.ModelForm):
         model = User
         fields = ('username', 'password', 'email',)
 
-    class save(self):
-	username = self.cleaned_data.get('username')
-	password = self.cleaned_data.get('password')
-	email = self.cleaned_data.get('email')
+    def save(self):
+    	username = self.cleaned_data.get('username')
+    	password = self.cleaned_data.get('password')
+    	email = self.cleaned_data.get('email')
 
-	user = User.objects.create_user(username, password, email)
-	return user
+    	user = User.objects.create_user(username, password, email)
+    	return user
