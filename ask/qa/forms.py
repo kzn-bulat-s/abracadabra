@@ -1,5 +1,7 @@
 from django import forms
 
+from django.contrib.auth.models import User
+
 from models import Question, Answer
 
 class AskForm(forms.ModelForm):
@@ -25,5 +27,11 @@ class AnswerForm(forms.Form):
 
     def save(self):
         data = self.cleaned_data
-        Answer.objects.create(text=data['text'],
+        answer = Answer.objects.create(text=data['text'],
                               question=data['question'])
+        return answer
+
+class UserCreationFormWithEmail(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'email',)

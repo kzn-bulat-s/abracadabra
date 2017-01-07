@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
 from models import Question, Answer
-from forms import AskForm, AnswerForm
+from forms import AskForm, AnswerForm, UserCreationFormWithEmail
 
 def test(request, *args, **kwargs):
     return HttpResponse('OK')
@@ -89,7 +89,7 @@ def ask_question(request):
 
 def signup(request):
     if request.method == 'POST':
-        signup_form = UserCreationForm(request.POST)
+        signup_form = UserCreationFormWithEmail(request.POST)
         if signup_form.is_valid():
             try:
                 user = signup_form.save()
@@ -101,7 +101,7 @@ def signup(request):
                 return HttpResponseRedirect('/')
 
     elif request.method == 'GET':
-        signup_form = UserCreationForm()
+        signup_form = UserCreationFormWithEmail()
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])
 
