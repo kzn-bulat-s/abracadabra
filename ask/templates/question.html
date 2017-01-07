@@ -3,6 +3,11 @@
         <h1>{{ question.title }}</h1>
         <p>{{ question.text }}</p>
         <p>Posted at {{ question.added_at }} by {{ question.author.username }}</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ answer_form }}
+            <input type="submit" value="Submit" />
+        </form>
         <ul>
             {% for answer in question.answer_set.all %}
             <li>

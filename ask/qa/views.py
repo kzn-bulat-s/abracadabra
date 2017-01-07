@@ -1,10 +1,11 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseNotAllowed, HttpResponseRedirect)
 from django.shortcuts import render
 
 from models import Question, Answer
+from forms import AskForm, AnswerForm
 
 def test(request, *args, **kwargs):
     return HttpResponse('OK')
@@ -41,10 +42,44 @@ def list_popular_questions(request):
     return _render_questions(request, Question.objects.popular(), page_no)
 
 def show_question(request, id):
-    try:
-        question = Question.objects.get(pk=id)
-        return render(request, 'question.html', {
-                'question': question
-            })
-    except ObjectDoesNotExist:
-        raise Http404()
+    if request.method == 'GET':
+        try:
+            question = Question.objects.get(pk=id)
+            answer_form = AnswerForm()
+            return render(request, 'question.html', {
+                    'question': question,
+                    'answer_form': answer_form,
+                })
+        except Question.DoesNotExist:
+            raise Http404()
+    elif request.method == 'POST':
+        answer_form = AnswerForm(request.POST)
+        
+        if answer_form.is_valid():
+            answer_form.save()
+        else:
+            return HttpResponseBadRequest()
+        
+        url = reverse('question', args=(id,))
+        return HttpResponseRedirect(url)
+
+    return HttpResponseNotAllowed()
+
+def ask_question(request):
+    if request.method == 'POST':
+        ask_form = AskForm(request.POST)
+
+        if ask_form.is_valid():
+            question = ask_form.save()
+            url = reverse('question', args=(question.id,))
+            return HttpResponseRedirect(url)
+
+    elif request.method == 'GET':
+        ask_form = AskForm()
+
+    else:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+    
+    return render(request, 'ask.html', {
+                'ask_form': ask_form,
+                'ask_url': reverse('ask') }) 
