@@ -43,11 +43,14 @@ class UserCreationFormWithEmail(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password', 'email',)
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
 
     def save(self):
     	username = self.cleaned_data.get('username')
     	password = self.cleaned_data.get('password')
     	email = self.cleaned_data.get('email')
 
-    	user = User.objects.create_user(username, password, email)
+    	user = User.objects.create_user(username, email, password)
     	return user
